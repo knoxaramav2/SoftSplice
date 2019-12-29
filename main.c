@@ -2,16 +2,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define KB 1024
+#include "util.h"
+#include "chunk.h"
 
-#define MD_SLICE    0
-#define MD_COMB     1
-
-typedef struct chunk{
-    int width;      //Actual width
-    char * data;    //Payload
-    char * id;      //Id for manifest
-} chunk;
+#define VERSION 0.1
 
 typedef struct config{
     int segWidth;   //Max width to read for reach chunk (bytes)
@@ -35,17 +29,73 @@ config * defConfig(){
     return conf;
 }
 
-config * parseCmd(int argc, char ** argv){
+void printVersion(){
+    printf("Version %.2f\r\n", VERSION);
+}
 
-    printf("Software Splicer Tool\r\nWoodrow Scott\r\n");
+void printHelp(){
+
+    FILE * fp;
+    fp = fopen("./help.txt", "r");
+    if (fp==0){
+        printf("Unable to open help file\r\n");
+        return;
+    }
+
+    size_t size;
+    fseek(fp, 0, SEEK_END);
+    size=ftell(fp);
+    rewind(fp);
+
+    char * help = malloc(size+2);
+    int i=0;
+    for(i=0; i<size; ++i){
+        help[i]=fgetc(fp);
+    }
+
+    help[i]=0;
+
+    printf("%s\r\n", help);
+}
+
+config * parseCmd(int argc, char ** argv){
 
     config * conf = defConfig(argc, argv);
 
-    //Combine/Divide mode select
-    if (conf->mode==MD_SLICE){
+    for (int i=1; i< argc; ++i){
+        char * op = argv[i];
+        
+        printf("%s\r\n", op);
 
-    } else {
+        if (strlen(op)<2 || op[0]!='-'){
+            printf("Please format options with '-' or '--' (%s)\r\n", op);
+            continue;
+        }
 
+        if (op[1]=='-'){
+
+            cli_args args = getOptionValue(op);
+
+            char * param = 0;
+
+            if(strcmp(args.option,"--help")==0){
+                printHelp();
+            } else if (strcmp(args.option, "")){
+
+            }
+        } else {
+            for(int j=1; j<strlen(op); ++j){
+                switch(op[j]){
+                    case 'h': printHelp(); break;
+                    case 'v': printVersion(); break;
+                    case 's': conf->mode=MD_SLICE; break;
+                    case 'c': conf->mode=MD_COMB; break;
+                    default: break;
+                }
+            }
+        }
+
+        fflush(stdout);
     }
 
     return conf;
@@ -53,8 +103,15 @@ config * parseCmd(int argc, char ** argv){
 
 int main(int argc, char**argv){
     
-    config * conf = parseCmd(argc, argv);
+    printf("Software Splicer Tool\r\nWoodrow Scott\r\n");
 
+    config * conf = parseCmd(argc, argv);
+    
+    if(conf->mode==MD_COMB){
+
+    } else {
+        
+    }
 
     free(conf);
 
