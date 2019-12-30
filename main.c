@@ -16,7 +16,10 @@ typedef struct config{
 
 //Read partial data from stream and create output info
 chunk * makeChunk(int width, char ** stream){
-    chunk * c = NULL;
+    //chunk * c = NULL;
+
+
+    return 0;
 }
 
 //Build default config structure
@@ -76,8 +79,6 @@ config * parseCmd(int argc, char ** argv){
 
             cli_args args = getOptionValue(op);
 
-            char * param = 0;
-
             if(strcmp(args.option,"--help")==0){
                 printHelp();
             } else if (strcmp(args.option, "")){
@@ -107,10 +108,12 @@ int main(int argc, char**argv){
 
     config * conf = parseCmd(argc, argv);
     
+    getDirListing(".");
+
     if(conf->mode==MD_COMB){
 
     } else {
-        
+
     }
 
     free(conf);

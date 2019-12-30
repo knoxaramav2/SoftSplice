@@ -7,5 +7,7 @@ typedef struct cli_args{
     char * value;
 } cli_args;
 
+char ** getDirListing(char*);
+
 cli_args getOptionValue(char *);
 #endif
