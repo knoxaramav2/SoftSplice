@@ -36,4 +36,4 @@ run:
 
 .PHONY: dev
 dev:
-	./$(OUT) -hv
+	./$(OUT) -hv util.c main.c splice.c ssplice.exe .vscode .gitignore

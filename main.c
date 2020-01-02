@@ -12,7 +12,26 @@ typedef struct config{
     int mode;       //Divide=0, Combine!=0
     int divSlice;   //Slice by fraction if = 1
 
+    char ** inputList;
+    int inputSize;
+
 } config;
+
+void addFile(config*c, char * target){
+    if (c->inputSize == 0){
+        c->inputList = malloc(sizeof(char*) * 5);
+    }
+
+    c->inputList[c->inputSize] = malloc(255);
+
+    strncpy(c->inputList[c->inputSize], target, strlen(target)+1);
+    printf("Added %s\r\n", c->inputList[c->inputSize]);
+    ++c->inputSize;
+
+    if (c->inputSize%5==0){
+        c->inputList=realloc(c->inputList, sizeof(char*) * (c->inputSize+5));
+    }
+}
 
 //Read partial data from stream and create output info
 chunk * makeChunk(int width, char ** stream){
@@ -28,6 +47,8 @@ config * defConfig(){
 
     conf->mode=MD_SLICE;
     conf->segWidth=KB*100000;//Default at 100 MB
+
+    conf->inputSize = 0;
 
     return conf;
 }
@@ -68,10 +89,10 @@ config * parseCmd(int argc, char ** argv){
     for (int i=1; i< argc; ++i){
         char * op = argv[i];
         
-        printf("%s\r\n", op);
+        //printf("%s\r\n", op);
 
-        if (strlen(op)<2 || op[0]!='-'){
-            printf("Please format options with '-' or '--' (%s)\r\n", op);
+        if (op[0]!='-'){
+            addFile(conf, op);
             continue;
         }
 
