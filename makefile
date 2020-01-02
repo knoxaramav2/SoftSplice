@@ -1,5 +1,5 @@
 #compiles application
-SRC= util.c splice.c main.c
+SRC= file.c util.c splice.c main.c
 O_SRC = $(SRC:.c=.o)
 OUT=ssplice
 BITVRS=64

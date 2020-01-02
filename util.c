@@ -85,4 +85,5 @@ char ** getDirListing(char * dir){
 
 char * getFileListing(char * dir){
 
+    return 0;
 }

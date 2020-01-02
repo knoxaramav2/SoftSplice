@@ -3,6 +3,7 @@
 #define SPLICE_SPLICE 
 
 #include "chunk.h"
+#include "file.h"
 
 //File partition information for chunking
 typedef struct objectNode{
@@ -10,7 +11,9 @@ typedef struct objectNode{
     unsigned length;
     char * fileName;
 
-    struct objectNod * next;
+    FILE_META * fileMeta;
+
+    struct objectNode * next;
 } objectNode;
 
 //Define file structure and metadata
